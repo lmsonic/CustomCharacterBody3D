@@ -886,7 +886,9 @@ impl CustomCharacterBody3D {
                 }
             }
             // Collision is wall by default.
+            state.wall = false;
             if apply_state.wall && depth > wall_depth {
+                state.wall = false;
                 self.collision_state.wall = true;
                 wall_depth = depth;
                 self.wall_normal = normal;
