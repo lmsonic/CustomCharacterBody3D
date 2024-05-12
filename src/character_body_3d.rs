@@ -46,7 +46,7 @@ impl CollisionState {
 const FLOOR_ANGLE_THRESHOLD: f32 = 0.01;
 
 #[derive(GodotClass)]
-#[class(base=StaticBody3D,init)]
+#[class(base=RigidBody3D,init)]
 #[allow(clippy::struct_excessive_bools)]
 struct CustomCharacterBody3D {
     #[export]
@@ -112,11 +112,11 @@ struct CustomCharacterBody3D {
     platform_rid: Rid,
     platform_object_id: i64,
 
-    base: Base<StaticBody3D>,
+    base: Base<RigidBody3D>,
 }
 
 #[godot_api]
-impl IStaticBody3D for CustomCharacterBody3D {
+impl IRigidBody3D for CustomCharacterBody3D {
     fn on_notification(&mut self, what: Node3DNotification) {
         if let Node3DNotification::EnterTree = what {
             self.collision_state = CollisionState::default();
@@ -125,6 +125,8 @@ impl IStaticBody3D for CustomCharacterBody3D {
             self.motion_results.clear();
             self.platform_velocity = Vector3::ZERO;
             self.platform_angular_velocity = Vector3::ZERO;
+            self.base_mut().set_use_custom_integrator(true);
+
         }
     }
 }
